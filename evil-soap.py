@@ -28,10 +28,10 @@ def open_id_connect_token():
     return base64.b64encode(random.randbytes(1908))
 
 def owa_redirect_history():
-    o1 = base64.b64encode(random.randbytes(14))
-    o2 = base64.b64encode(random.randbytes(14))
-    o3 = base64.b64encode(random.randbytes(14))
-    return o1.decode()+'|'+o2.decode()+'|'+o3.decode()
+    o1 = base64.b64encode(random.randbytes(14)).decode().split('=')[0]
+    o1 += '|'+base64.b64encode(random.randbytes(14)).decode().split('=')[0]
+    o1 += '|'+base64.b64encode(random.randbytes(14)).decode().split('=')[0]
+    return o1
 
 def owa_canary():
     return base64.b64encode(random.randbytes(55))
