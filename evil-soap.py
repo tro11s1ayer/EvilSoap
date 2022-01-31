@@ -37,9 +37,9 @@ def owa_canary():
     return base64.b64encode(random.randbytes(55))
 
 def service_suite_proxy_key():
-    p1 = base64.b64encode(random.randbytes(32))
-    p2 = base64.b64encode(random.randbytes(16))
-    return p1.decode()+'&'+p2.decode()
+    p1 = base64.b64encode(random.randbytes(32)).decode()
+    p1 += '&'+base64.b64encode(random.randbytes(16)).decode()
+    return p1
 
 def outlook_session():
     return codecs.decode(binascii.hexlify(random.randbytes(16)))
