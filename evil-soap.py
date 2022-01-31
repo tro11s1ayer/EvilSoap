@@ -264,7 +264,7 @@ while True:
     &client_info=1\
     &client-request-id=\
     &X-AnchorMailbox=%s
-    '''%(enc_redirect_uri, enc_redirect_uri, enc_code, clientId, enc_anchorMailbox)
+    '''%(enc_redirect_uri, enc_scope, enc_code, clientId, enc_anchorMailbox)
     
     headers = {'Host': 'login.microsoftonline.com',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
